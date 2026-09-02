@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             Int     @id @default(autoincrement())
+  email          String  @unique
+  isActivated    Boolean @default(false)
+  activationLink String?
+  name           String?
+  password       String
+  Role           String  @default("USER")
+  posts          Post[]
+  tokens         Token[]
+}
+
+model Token {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int
+  refreshToken String
+  createdAt    DateTime @default(now())
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean @default(false)
+  author    User    @relation(fields: [authorId], references: [id])
+  authorId  Int 
+  animeId Int
+  createdAt    DateTime @default(now())
+}
+
+model Anime {
+  id        Int @id @default(autoincrement())
+  anilistId Int @unique
+
+  titleRomaji  String?
+  titleEnglish String?
+  titleNative  String?
+
+  description String? @db.Text
+  coverImage  String?
+  bannerImage String?
+
+  year          Int?
+  status        String?
+  episodesCount Int?
+
+  episodes Episode[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Episode {
+  id Int @id @default(autoincrement())
+
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  number Int
+  title  String?
+
+  videoUrl String?
+  provider String  @default("anilibria")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([animeId, number])
+}

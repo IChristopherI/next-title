@@ -1,0 +1,11 @@
+{
+  "watch": ["app"],
+  "ignore": [
+    "node_modules",
+    "generated",
+    "data",
+    "app/prisma/migrations"
+  ],
+  "ext": "js,json",
+  "exec": "node app/src/index.js"
+}
