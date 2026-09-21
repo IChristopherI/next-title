@@ -1,9 +1,9 @@
-import axios from "axios";
+import { axiosInstance } from "@/api/axiosInstance";
 import { create } from "zustand";
 type User = {
     email: string;
     name?: string
-    Role: "Admin" | "User";
+    Role: "USER" | "ADMIN";
 }
 
 type LoginData = {
@@ -23,24 +23,24 @@ export const useAuthStore = create<AuthStore>((set) => ({
     user: null,
     refreshToken: '',
     isAuth: false,
-    Role: '',
     isLoading: true,
     login: async ({email, password}) => {
-        const response = await axios.post("http://localhost:5050/api/login", { email, password }, { withCredentials: true })
+        const response = await axiosInstance.post("/login", { email, password })
         set({ user: response.data.user, refreshToken: response.data.refreshToken, isAuth: true })
     },
 
     logout: async () => {
-        await axios.post("http://localhost:5050/api/logout", {}, { withCredentials: true })
+        await axiosInstance.post("/logout", {})
         set({user:null, refreshToken: '', isAuth:false})
         
     },
     checkAuth: async () => {
         try {
-            const response = await axios.get("http://localhost:5050/api/me", { withCredentials: true })
+            const response = await axiosInstance.get("/me")
             set({ user: response.data.user, refreshToken: response.data.refreshToken, isAuth: true })
         } catch (error) {
             set({ user: null, refreshToken: '', isAuth: false})
+            console.log("Error checking authentication:", error);
         }  finally {
             set({ isLoading: false });
         }

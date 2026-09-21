@@ -1,5 +1,4 @@
-import { axiosInstance } from "@/lib/Axios";
-import axios from "axios";
+import { axiosInstance } from "@/api/AxiosInstance";
 import { useEffect, useState } from "react";
 
 export default function useFetch<T>(url: string) {

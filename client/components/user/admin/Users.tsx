@@ -8,7 +8,7 @@ import { useMemo, useState } from "react";
 export default function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState("");
   const { data, loading, error } = useFetch<User[]>(
-    "http://localhost:5050/api/admin/getUsers"
+    "/admin/getUsers"
   );
 
     const users = data || [];
@@ -85,7 +85,7 @@ export default function AdminUsers() {
             {filteredUsers.map((adminUser) => (
               <tr
                 key={adminUser.id}
-                className="border-b border-white/6 transition hover:bg-white/[0.03]"
+                className="border-b border-white/6 transition hover:bg-white/3"
               >
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-3">
@@ -104,7 +104,7 @@ export default function AdminUsers() {
                 </td>
 
                 <td className="px-5 py-4">
-                  <span className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-zinc-300">
+                  <span className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/4 px-2 py-1 text-xs text-zinc-300">
                     <ShieldCheck size={14} />
                     {adminUser.Role || "User"}
                   </span>
@@ -112,7 +112,7 @@ export default function AdminUsers() {
 
                 <td className="px-5 py-4 text-zinc-300"> 
                     <span>
-                        {adminUser.isActive === true ? "Да" : "Нет"}
+                        {adminUser.isActivated ? "Да" : "Нет"}
                     </span>
                 </td>
               </tr>

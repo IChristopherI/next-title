@@ -1,6 +1,6 @@
 import { prisma } from "../prisma/prisma.js";
 import bcrypt from "bcryptjs";
-import TokenService from "./jwt-token.js"
+import TokenService from "./jwt-service.js"
 import { randomUUID } from "crypto";
 import mailService from "./mail-service.js";
 class UserService {
@@ -64,6 +64,7 @@ class UserService {
                 name: user.name,
                 id: user.id,
                 email: user.email,
+                Role: user.Role,
             },
             tokens
         }

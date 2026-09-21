@@ -7,7 +7,6 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import logo from "@/logo.jpg";
 import {
   Heart,
   History,
@@ -20,7 +19,6 @@ import {
   Timer,
   Users2,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

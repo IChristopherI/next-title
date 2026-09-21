@@ -1,90 +1,157 @@
 "use client";
 
-import { useState } from "react";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { axiosInstance } from "@/lib/Axios";
-import useFetch from "@/hooks/useFetch";
+import { Pencil, SendHorizontal } from "lucide-react";
+import { useComments } from "@/hooks/use-comments";
 
-type Comment = {
-  id: number;
-  title: string;
-  author?: {
-    name: string | null;
-    email: string;
-  };
-  createdAt :string
-};
+const AVATAR_COLORS = [
+  "bg-indigo-500",
+  "bg-sky-600",
+  "bg-emerald-600",
+  "bg-rose-500",
+  "bg-amber-600",
+];
 
-type Props = {
-  id: number | string;
-};
+function getInitials(name: string) {
+  return name.trim().charAt(0).toUpperCase() || "?";
+}
 
-export default function Comments({ id }: Props) {
-  const { data, loading, error } = useFetch<Comment[]>(`/anime/${id}/comments`);
+// один и тот же человек всегда получает один и тот же цвет аватара
+function getAvatarColor(key: string) {
+  const hash = key.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
 
-  const [value, setValue] = useState("");
-  const [newComments, setNewComments] = useState<Comment[]>([]);
+function formatRelativeTime(dateString: string) {
+  const diffMs = Date.now() - new Date(dateString).getTime();
+  const minutes = Math.floor(diffMs / 60000);
 
-  const comments = [...newComments, ...(data ?? [])];
+  if (minutes < 1) return "только что";
+  if (minutes < 60) return `${minutes} мин назад`;
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} ч назад`;
 
-    if (!value.trim()) return;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} дн назад`;
 
-    try {
-      const response = await axiosInstance.post(
-        `/anime/${id}/comments`,
-        { title: value },
-        { withCredentials: true }
-      );
+  return new Date(dateString).toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+}
 
-      setNewComments((prev) => [response.data, ...prev]);
-      setValue("");
-    } catch (error) {
-      console.log(error);
-    }
-  }
+function Avatar({ label }: { label: string }) {
+  return (
+    <div
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-medium text-white ${getAvatarColor(label)}`}
+    >
+      {getInitials(label)}
+    </div>
+  );
+}
+
+export default function Comments({ id }: { id: number }) {
+  const {
+    user,
+    loading,
+    addComment,
+    startEditComment,
+    cancelEditComment,
+    updateComment,
+    value,
+    comments,
+    setValue,
+    editingId,
+    editedTitle,
+    setEditedTitle,
+  } = useComments(id);
 
   if (loading) {
-    return <p>Загрузка комментариев...</p>;
+    return <p className="text-sm text-zinc-500">Загрузка комментариев...</p>;
   }
 
-const date = new Date();
-const timeRu = date.toLocaleTimeString('ru-RU');
-
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div className="flex gap-2">
+    <div className="space-y-6 max-w-7xl w-full mx-auto">
+      <form onSubmit={addComment} className="flex items-center gap-3">
+        <Avatar label={user?.name || user?.email || "Гость"} />
+        <div className="relative flex-1">
           <Input
             type="text"
-            placeholder="Написать комментарий..."
+            placeholder={user ? "Написать комментарий..." : "Войдите, чтобы оставить комментарий"}
             value={value}
             onChange={(event) => setValue(event.target.value)}
+            className="h-11 rounded-full border-zinc-800 bg-zinc-900/60 pl-4 pr-11 focus-visible:ring-indigo-500/40"
           />
-
-          <Button type="submit">Отправить</Button>
+          <button
+            type="submit"
+            disabled={!value.trim()}
+            className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-zinc-500 transition-colors hover:text-indigo-400 disabled:opacity-30"
+          >
+            <SendHorizontal size={16} />
+          </button>
         </div>
       </form>
 
-      <div className="mt-4 space-y-3">
+      <div className="divide-y divide-zinc-800/70">
+        {comments.length === 0 && (
+          <p className="py-6 text-sm text-zinc-500">Пока нет ни одного комментария — будьте первым.</p>
+        )}
+
         {comments.map((comment) => {
+          const isEditingThis = editingId === comment.id;
+          const authorLabel = comment.author?.name || comment.author?.email || "Пользователь";
+          const isOwn = !!user && comment.author?.email === user.email;
 
-          const ruTimer = new Date(comment.createdAt).toLocaleDateString('ru-RU', {  day:'2-digit', month: '2-digit', hour: '2-digit',minute: '2-digit'})
-          return(
-            <div key={comment.id} className="rounded-lg bg-zinc-900 p-3">
-            <p className="text-sm text-zinc-400">
-              {comment.author?.name || comment.author?.email || "Пользователь"}
-            </p>
+          return (
+            <div key={comment.id} className="group flex gap-3 py-4 first:pt-0">
+              <Avatar label={authorLabel} />
 
-            <p>{comment.title}</p>
-            <p>{ruTimer}</p>
-          </div>
-          )
-})}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm font-medium text-zinc-100">{authorLabel}</span>
+                  <span className="text-xs text-zinc-500">{formatRelativeTime(comment.createdAt)}</span>
+                </div>
 
+                {isEditingThis ? (
+                  <div className="mt-2 flex items-center gap-2">
+                    <Input
+                      type="text"
+                      value={editedTitle}
+                      onChange={(event) => setEditedTitle(event.target.value)}
+                      className="h-9 rounded-full border-zinc-800 bg-zinc-900/60 focus-visible:ring-indigo-500/40"
+                      autoFocus
+                    />
+                    <button
+                      onClick={() => updateComment(comment.id)}
+                      className="shrink-0 text-xs font-medium text-indigo-400 hover:text-indigo-300"
+                    >
+                      Сохранить
+                    </button>
+                    <button
+                      onClick={cancelEditComment}
+                      className="shrink-0 text-xs text-zinc-500 hover:text-zinc-300"
+                    >
+                      Отмена
+                    </button>
+                  </div>
+                ) : (
+                  <p className="mt-1 text-sm leading-relaxed text-zinc-300">{comment.title}</p>
+                )}
+
+                {!isEditingThis && isOwn && (
+                  <button
+                    onClick={() => startEditComment(comment)}
+                    className="mt-1.5 flex items-center gap-1 text-xs text-zinc-600 opacity-0 transition-opacity hover:text-zinc-300 group-hover:opacity-100"
+                  >
+                    <Pencil size={12} />
+                    Изменить
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

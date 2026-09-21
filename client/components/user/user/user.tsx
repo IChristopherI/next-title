@@ -55,7 +55,7 @@ export default function ProfileUser() {
           <button
             type="button"
             onClick={logout}
-            className="flex w-full items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-300 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300 md:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-md border border-white/10 bg-white/4 px-4 py-2 text-sm text-zinc-300 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300 md:w-auto"
           >
             <LogOut size={17} />
             Выйти
@@ -81,7 +81,7 @@ export default function ProfileUser() {
             </div>
 
             <div className="mt-6 space-y-3">
-              <div className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.03] p-3">
+              <div className="flex items-center gap-3 rounded-md border border-white/10 bg-white/3 p-3">
                 <Mail size={18} className="text-zinc-500" />
 
                 <div>
@@ -92,7 +92,7 @@ export default function ProfileUser() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.03] p-3">
+              <div className="flex items-center gap-3 rounded-md border border-white/10 bg-white/3 p-3">
                 <ShieldCheck size={18} className="text-zinc-500" />
 
                 <div>

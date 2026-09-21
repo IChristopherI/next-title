@@ -39,8 +39,8 @@ class UserController {
 
     async getAll(req, res) {
         try {
-            const users = await prisma.user.findMany()
-            res.json( users )
+            const users = await prisma.user.findMany({ orderBy: { id: "asc" }});
+            return res.json(users);
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -50,7 +50,7 @@ class UserController {
             where: { id: req.userId }, select: { Role: true }
 
         })
-        if (!user || user.Role !== "Admin") {
+        if (!user || user.Role !== "ADMIN") {
             return res.json(403).json({message: "Forbidden"})
         }
     }
@@ -71,10 +71,9 @@ class UserController {
 
     async checkAuth(req, res) {
         try {
-
             const user = await prisma.user.findUnique({
                 where: {
-                    id: req.userId,
+                    id: req.user.id
                 },
                 select: {
                     id: true,
@@ -88,7 +87,7 @@ class UserController {
                 return res.status(401).json({ message: "User not found" });
             }
 
-            res.json({ user });
+            return  res.json({ user });
         } catch (e) {
 
             console.log(e)

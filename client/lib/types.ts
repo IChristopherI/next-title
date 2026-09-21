@@ -1,9 +1,9 @@
 export type User = {
-  id: string;
-  name: string;
+  id: number;
+  name: string | null;
   email: string;
-  Role?: "Admin" | "User";
-  isActive: boolean;
+  Role: "ADMIN" | "USER";
+  isActivated: boolean;
 };
 
 
@@ -96,4 +96,18 @@ export type WatchItem = {
     time: number;
     duration: number;
     updatedAt: number;
+};
+
+export type Comment = {
+  id: number;
+  title: string;
+  author?: {
+    name: string | null;
+    email: string;
+  };
+  createdAt: string;
+};
+
+export type CommentProps = {
+  id: number | string;
 };

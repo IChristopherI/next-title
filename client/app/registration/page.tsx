@@ -1,7 +1,7 @@
 'use client'
 
+import { registration } from "@/api/validation.api";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FormEvent } from "react";
@@ -31,15 +31,7 @@ export default function Registration() {
     try {
       setLoading(true);
 
-      const response = await axios.post( "http://localhost:5050/api/registration", {
-          name,
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await registration(name, email, password);
 
       console.log(response.data);
 

@@ -1,7 +1,7 @@
 'use client'
 
 import ProfileAdmin from "@/components/user/admin/Dashboard";
-import ProfileUser from "@/components/user/user";
+import ProfileUser from "@/components/user/user/user";
 import { useAuthStore } from "@/context/AuthContext";
 
 export default function ProfilePage() {
@@ -18,7 +18,7 @@ export default function ProfilePage() {
 
     return (
         <div>
-            {user?.Role === "Admin" ? <ProfileAdmin /> :  <ProfileUser />}
+            {user?.Role === "ADMIN" ? <ProfileAdmin /> : <ProfileUser />}
         </div>
     )
 }

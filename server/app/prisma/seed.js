@@ -7,7 +7,7 @@ async function main() {
       name: "Admin",
       email: "admin@gmail.com",
       password: hashPassword,
-      Role: "Admin",      
+      Role: "ADMIN",      
     }
   })
   console.log("Created user:", user);

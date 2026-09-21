@@ -1,6 +1,6 @@
 'use client';
 
-import { getSheduleWeek } from "@/lib/service";
+import { getSheduleWeek } from "@/api/schedule.api";
 import { ScheduleItem } from "@/lib/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";

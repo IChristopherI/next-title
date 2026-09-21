@@ -1,9 +1,7 @@
 'use client'
 
 import SearchAnime from "@/components/anime/search/SearchAnime";
-import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Select, SelectContent, SelectGroup, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/context/AuthContext";
 import { Bell, LogOut, MessageCircle, User } from "lucide-react";

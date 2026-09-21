@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Input } from "../../ui/input";
 import { Anime } from "@/lib/types";
+import { searchAnime } from "@/api/anime.api";
 
 
 function getAnimeTitle(anime: Anime) {
@@ -26,9 +27,7 @@ export default function SearchAnime() {
     const timer = setTimeout(async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `http://localhost:5050/api/anime/search?query=${encodeURIComponent(value)}`
-        );
+          const response = await searchAnime(value);
         setResults(response.data);
       } catch (error) {
         console.log("Search error:", error);

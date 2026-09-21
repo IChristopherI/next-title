@@ -1,15 +1,11 @@
 import { useAuthStore } from "@/context/AuthContext";
-import useFetch from "@/hooks/useFetch";
 import { useState } from "react";
 import AdminUsers from "./Users";
 import AdminReports from "./Reports";
-import { Icon, UserCog } from "lucide-react";
-
-
+import {  UserCog } from "lucide-react";
 
 export default function DashboardAdmin() {
   const { user } = useAuthStore((state) => state);
-  const { loading, error } = useFetch("");
   const [activeTab, setActiveTab] = useState("dashboard");
 
 
@@ -31,13 +27,7 @@ export default function DashboardAdmin() {
 
   }
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if(error) {
-    return <p>Error loading data</p>;
-  }
-  
+ 
   return (
     <div className="flex flex-col min-h-screen py-2">
         <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/3 p-3 mb-2">
