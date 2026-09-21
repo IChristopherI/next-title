@@ -1,8 +1,8 @@
 'use client'
 
-import ProfileAdmin from "@/components/user/admin/Dashboard";
-import ProfileUser from "@/components/user/user/user";
-import { useAuthStore } from "@/context/AuthContext";
+import ProfileAdmin from "@/features/auth/components/admin/Dashboard";
+import ProfileUser from "@/features/auth/components/user/user";
+import { useAuthStore } from "@/features/auth/components/Auth";
 
 export default function ProfilePage() {
     const { user } = useAuthStore((state) => state);

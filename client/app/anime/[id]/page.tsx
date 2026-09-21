@@ -1,4 +1,4 @@
-import AnimeDetailsClient from "@/components/anime/AnimeDetails/AnimeDetailsClient";
+import AnimeDetailsClient from "@/anime/components/AnimeDetailsClient";
 
 type Props = {
   params: Promise<{

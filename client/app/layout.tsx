@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "./loyaout/Header";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "./loyaout/Sidebar";
-import AuthCompilize from "@/components/user/AuthCheck";
+import Header from "../shared/layout/Header";
+import { AppSidebar } from "../shared/layout/Sidebar";
+import AuthCompilize from "@/features/auth/components/AuthCheck";
+import { SidebarProvider } from "@/shared/ui/sidebar";
 
 
 export const metadata: Metadata = {title: ""};

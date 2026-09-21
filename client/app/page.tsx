@@ -1,7 +1,7 @@
-import ContinueWatching from "../components/home/ContinueWatch";
-import ListTitle from "../components/home/ListTitle";
-import NewSeasonAnime from "../components/home/NeSeasonAnime";
-import WeeklySchedule from "../components/home/WeeklyShcedule";
+import ContinueWatching from "@/anime/components/AnimeContinueWatch";
+import ListTitle from "../anime/components/AnimeList";
+import WeeklySchedule from "../anime/components/AnimeSchedule";
+import NewSeasonAnime from "@/anime/components/AnimeNewSeason";
 
 export default function Home() {
     return (

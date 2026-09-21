@@ -1,8 +1,8 @@
 "use client";
 
-import { getAnimeList, getAnimeListFilter } from "@/api/anime.api";
-import Card from "@/components/anime/AnimeCard";
-import Filter from "@/components/filters/Filter";
+import { getAnimeList, getAnimeListFilter } from "@/anime/api/anime.api";
+import Card from "@/anime/components/AnimeCard";
+import Filter from "@/anime/components/AnimeFilters";
 import { CardProps } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
